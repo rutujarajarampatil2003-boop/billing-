@@ -56,13 +56,13 @@ export default function CreateInvoice() {
       });
 
       if (invoiceRes.ok) {
-        alert("✅ Bill successfully add jhale!");
+        alert("✅ Invoice successfully save jhale ani History madhe add jhale!");
         router.push("/");
+        router.refresh(); // Force refresh to show new data
+      } else {
+        const errorData = await invoiceRes.json();
+        alert(`❌ Error: ${errorData.details || "Save karta aale nahi"}`);
       }
-    } catch (err) {
-      console.error(err);
-      alert("❌ Error: Bill add karta aale nahi.");
-    }
   };
 
   return (
@@ -107,8 +107,8 @@ export default function CreateInvoice() {
             
             <div className="space-y-4">
               {items.map((item, index) => (
-                <div key={index} className="grid grid-cols-12 gap-3 items-end">
-                  <div className="col-span-6">
+                <div key={index} className="flex flex-col sm:grid sm:grid-cols-12 gap-3 p-4 sm:p-0 border sm:border-0 border-zinc-100 dark:border-zinc-800 rounded-xl relative">
+                  <div className="sm:col-span-6">
                     <label className="block text-xs text-zinc-500 mb-1">Description</label>
                     <input 
                       type="text" 
@@ -119,34 +119,34 @@ export default function CreateInvoice() {
                       required
                     />
                   </div>
-                  <div className="col-span-2">
-                    <label className="block text-xs text-zinc-500 mb-1">Qty</label>
-                    <input 
-                      type="number" 
-                      value={item.quantity}
-                      onChange={(e) => updateItem(index, "quantity", parseInt(e.target.value))}
-                      className="w-full px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-transparent outline-none"
-                      min="1"
-                    />
+                  <div className="flex gap-3 sm:contents">
+                    <div className="flex-1 sm:col-span-2">
+                      <label className="block text-xs text-zinc-500 mb-1">Qty</label>
+                      <input 
+                        type="number" 
+                        value={item.quantity}
+                        onChange={(e) => updateItem(index, "quantity", parseInt(e.target.value))}
+                        className="w-full px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-transparent outline-none"
+                        min="1"
+                      />
+                    </div>
+                    <div className="flex-1 sm:col-span-3">
+                      <label className="block text-xs text-zinc-500 mb-1">Price (₹)</label>
+                      <input 
+                        type="number" 
+                        value={item.price}
+                        onChange={(e) => updateItem(index, "price", parseFloat(e.target.value))}
+                        className="w-full px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-transparent outline-none"
+                      />
+                    </div>
                   </div>
-                  <div className="col-span-3">
-                    <label className="block text-xs text-zinc-500 mb-1">Price (₹)</label>
-                    <input 
-                      type="number" 
-                      value={item.price}
-                      onChange={(e) => updateItem(index, "price", parseFloat(e.target.value))}
-                      className="w-full px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-transparent outline-none"
-                    />
-                  </div>
-                  <div className="col-span-1">
-                    <button 
-                      type="button" 
-                      onClick={() => removeItem(index)}
-                      className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
+                  <button 
+                    type="button" 
+                    onClick={() => removeItem(index)}
+                    className="absolute top-2 right-2 sm:static p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
               ))}
             </div>
